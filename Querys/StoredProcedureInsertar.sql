@@ -1,17 +1,7 @@
---Genere store procedures para manejar la inserción, modificado, borrado 
---(si corresponde, también debe decidir si determinadas entidades solo admitirán borrado lógico) de cada tabla. 
---Los nombres de los store procedures NO deben comenzar con “SP”.  
 
-USE Com2900G03;
-GO
 
-IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'clinicaInsercion')
-    EXEC('CREATE SCHEMA clinicaInsercion')
-GO
-
-CREATE PROCEDURE clinica.Insertar_Paciente
+CREATE OR ALTER PROCEDURE clinica.Insertar_Paciente
 (
-    @Id_Historia_Clinica INT,
     @Nombre VARCHAR(50),
     @Apellido VARCHAR(50),
     @Apellido_Materno VARCHAR(50),
@@ -26,7 +16,6 @@ CREATE PROCEDURE clinica.Insertar_Paciente
     @Telefono_Fijo VARCHAR(20),
     @Telefono_Contacto_Alternativo VARCHAR(20),
     @Telefono_Laboral VARCHAR(20),
-    @Fecha_Registro DATETIME,
     @Fecha_Actualizacion DATETIME,
     @Usuario_Actualizacion VARCHAR(50)
 )
@@ -34,7 +23,6 @@ AS
 BEGIN
     INSERT INTO clinica.Paciente
     (
-        Id_Historia_Clinica,
         Nombre,
         Apellido,
         Apellido_Materno,
@@ -49,13 +37,11 @@ BEGIN
         Telefono_Fijo,
         Telefono_Contacto_Alternativo,
         Telefono_Laboral,
-        Fecha_Registro,
         Fecha_Actualizacion,
         Usuario_Actualizacion
     )
     VALUES
     (
-        @Id_Historia_Clinica,
         @Nombre,
         @Apellido,
         @Apellido_Materno,
@@ -79,12 +65,10 @@ GO
 
 --Insertar Usuario
 
-CREATE PROCEDURE clinica.Insertar_Usuario
+CREATE OR ALTER PROCEDURE clinica.Insertar_Usuario
 (
     @Id_Usuario INT,
     @Contraseña VARCHAR(50),
-    @Fecha_Creacion DATETIME,
-    @Id_Historia_Clinica INT
 )
 AS
 BEGIN
@@ -92,30 +76,25 @@ BEGIN
     (
         Id_Usuario,
         Contraseña,
-        Fecha_Creacion,
-        Id_Historia_Clinica
     )
     VALUES
     (
         @Id_Usuario,
         @Contraseña,
-        @Fecha_Creacion,
-        @Id_Historia_Clinica
     );
 END;
 GO
 
 --Insertar Estudio
 
-CREATE PROCEDURE clinica.Insertar_Estudio
+CREATE OR ALTER PROCEDURE clinica.Insertar_Estudio
 (
     @Id_Estudio INT,
     @Fecha DATE,
     @Nombre_Estudio VARCHAR(50),
     @Autorizado INT,
     @Documento_Resultado VARCHAR(100),
-    @Imagen_Resultado VARCHAR(100),
-    @Id_Historia_Clinica INT
+    @Imagen_Resultado VARCHAR(100)
 )
 AS
 BEGIN
@@ -126,8 +105,7 @@ BEGIN
         Nombre_Estudio,
         Autorizado,
         Documento_Resultado,
-        Imagen_Resultado,
-        Id_Historia_Clinica
+        Imagen_Resultado
     )
     VALUES
     (
@@ -136,15 +114,14 @@ BEGIN
         @Nombre_Estudio,
         @Autorizado,
         @Documento_Resultado,
-        @Imagen_Resultado,
-        @Id_Historia_Clinica
+        @Imagen_Resultado
     );
 END;
 GO
 
 --Insertar Cobertura
 
-CREATE PROCEDURE clinica.Insertar_Cobertura
+CREATE OR ALTER PROCEDURE clinica.Insertar_Cobertura
 (
     @Id_Cobertura INT,
     @Imagen_Credencial VARCHAR(100),
@@ -159,28 +136,25 @@ BEGIN
         Id_Cobertura,
         Imagen_Credencial,
         Nro_Socio,
-        Fecha_Registro,
-        Id_Historia_Clinica
+        Fecha_Registro
     )
     VALUES
     (
         @Id_Cobertura,
         @Imagen_Credencial,
         @Nro_Socio,
-        @Fecha_Registro,
-        @Id_Historia_Clinica
+        @Fecha_Registro
     );
 END;
 GO
 
 --Insertar Prestador
 
-CREATE PROCEDURE clinica.Insertar_Prestador
+CREATE OR ALTER PROCEDURE clinica.Insertar_Prestador
 (
     @Id_Prestador INT,
     @Nombre_Prestador VARCHAR(50),
-    @Plan_Prestador VARCHAR(50),
-    @Id_Cobertura INT
+    @Plan_Prestador VARCHAR(50)
 )
 AS
 BEGIN
@@ -188,22 +162,22 @@ BEGIN
     (
         Id_Prestador,
         Nombre_Prestador,
-        Plan_Prestador,
-        Id_Cobertura
+        Plan_Prestador
+        
     )
     VALUES
     (
         @Id_Prestador,
         @Nombre_Prestador,
-        @Plan_Prestador,
-        @Id_Cobertura
+        @Plan_Prestador
+      
     );
 END;
 GO
 
 --Insertar Domicilio
 
-CREATE PROCEDURE clinica.Insertar_Domicilio
+CREATE OR ALTER PROCEDURE clinica.Insertar_Domicilio
 (
     @Id_Domicilio INT,
     @Calle VARCHAR(50),
@@ -214,7 +188,6 @@ CREATE PROCEDURE clinica.Insertar_Domicilio
     @Pais VARCHAR(50),
     @Provincia VARCHAR(50),
     @Localidad VARCHAR(50),
-    @Id_Historia_Clinica INT
 )
 AS
 BEGIN
@@ -228,8 +201,7 @@ BEGIN
         Codigo_Postal,
         Pais,
         Provincia,
-        Localidad,
-        Id_Historia_Clinica
+        Localidad
     )
     VALUES
     (
@@ -241,15 +213,14 @@ BEGIN
         @Codigo_Postal,
         @Pais,
         @Provincia,
-        @Localidad,
-        @Id_Historia_Clinica
+        @Localidad
     );
 END;
 GO
 
 --Insertar Reserva Turno Medico
 
-CREATE PROCEDURE clinica.Insertar_Reserva_Turno_Medico
+CREATE OR ALTER PROCEDURE clinica.Insertar_Reserva_Turno_Medico
 (
     @Id_Turno INT,
     @Fecha DATE,
@@ -289,7 +260,7 @@ GO
 
 --Insertar Estado Turno
 
-CREATE PROCEDURE clinica.Insertar_Estado_Turno
+CREATE OR ALTER PROCEDURE clinica.Insertar_Estado_Turno
 (
     @Id_Estado INT,
     @Nombre_Estado VARCHAR(50)
@@ -311,7 +282,7 @@ GO
 
 --Insertar Tipo Turno
 
-CREATE PROCEDURE clinica.Insertar_Tipo_Turno
+CREATE OR ALTER PROCEDURE clinica.Insertar_Tipo_Turno
 (
     @Id_Tipo_Turno INT,
     @Nombre_Tipo_Turno VARCHAR(50)
@@ -333,7 +304,7 @@ GO
 
 --Insertar Dias Por Sede
 
-CREATE PROCEDURE clinica.Insertar_Dias_Por_Sede
+CREATE OR ALTER PROCEDURE clinica.Insertar_Dias_Por_Sede
 (
     @Id_Sede INT,
     @Id_Medico INT,
@@ -361,7 +332,7 @@ GO
 
 --Insertar Medico
 
-CREATE PROCEDURE clinica.Insertar_Medico
+CREATE OR ALTER PROCEDURE clinica.Insertar_Medico
 (
     @Id_Medico INT,
     @Nombre VARCHAR(50),
@@ -389,21 +360,18 @@ GO
 
 --Insertar Especialidad
 
-CREATE PROCEDURE clinica.Insertar_Especialidad
+CREATE OR ALTER PROCEDURE clinica.Insertar_Especialidad
 (
-    @Id_Especialidad INT,
     @Nombre_Especialidad VARCHAR(50)
 )
 AS
 BEGIN
     INSERT INTO clinica.Especialidad
     (
-        Id_Especialidad,
         Nombre_Especialidad
     )
     VALUES
     (
-        @Id_Especialidad,
         @Nombre_Especialidad
     );
 END;
@@ -411,7 +379,7 @@ GO
 
 --Insertar Sede De Atencion
 
-CREATE PROCEDURE clinica.Insertar_Sede_De_Atencion
+CREATE OR ALTER PROCEDURE clinica.Insertar_Sede_De_Atencion
 (
     @Id_Sede INT,
     @Nombre_Sede VARCHAR(50),

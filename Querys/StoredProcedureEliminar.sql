@@ -58,7 +58,7 @@ GO
 
 CREATE PROCEDURE clinicaEliminar.Eliminar_Estudio
 (
-    @Id_Estudio INT
+    @Id_Estudio VARCHAR(100)
 )
 AS
 BEGIN

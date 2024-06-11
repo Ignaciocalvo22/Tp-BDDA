@@ -80,7 +80,31 @@ BEGIN
     SET Nombre_Estudio = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Nombre_Estudio, 'Ã¡', 'á'), 'Ã©', 'é'), 'Ã­', 'í'), 'Ã³', 'ó'), 'Ãº', 'ú'), 'Ã±', 'ñ'),
         Plan_ = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Plan_, 'Ã¡', 'á'), 'Ã©', 'é'), 'Ã­', 'í'), 'Ã³', 'ó'), 'Ãº', 'ú'), 'Ã±', 'ñ');
 
-    --Inserto datos en la Tabla Tipo_Estudio
+
+--Updateo la tabla Clinica.Tipo_Estudio en caso de que el registro ya exista y cambie algun otro campo
+    UPDATE clinica.Tipo_Estudio
+    SET
+        Area = a.Area,
+        Nombre_Estudio = a.Nombre_Estudio,
+        Prestador = a.Prestador,
+        Plan_ = a.Plan_,
+        Cobertura = a.Cobertura,
+        Costo = a.Costo,
+        Autorizacion = a.Autorizacion
+    FROM clinica.tempEstudio a
+    WHERE clinica.Tipo_Estudio.Id_Estudio = a.Id_Estudio
+    AND
+    (
+        clinica.Tipo_Estudio.Area != a.Area
+        OR clinica.Tipo_Estudio.Nombre_Estudio != a.Nombre_Estudio
+        OR clinica.Tipo_Estudio.Prestador != a.Prestador
+        OR clinica.Tipo_Estudio.Plan_ != a.Plan_
+        OR clinica.Tipo_Estudio.Cobertura != a.Cobertura
+        OR clinica.Tipo_Estudio.Costo != a.Costo
+        OR clinica.Tipo_Estudio.Autorizacion != a.Autorizacion
+    )
+
+    --Inserto datos en la Tabla Tipo_Estudio (evita repetidos)
     INSERT INTO clinica.Tipo_Estudio
     (
         Id_Estudio,
@@ -103,10 +127,27 @@ BEGIN
         Autorizacion
     FROM clinica.tempEstudio
     WHERE Id_Estudio NOT IN (SELECT Id_Estudio FROM clinica.Tipo_Estudio)
-    
+
+--Inserto los valores posibles en Estudio:
+    INSERT INTO clinica.Estudio
+    (
+        Id_Estudio,
+        Nombre_Estudio,
+        Autorizado
+    )
+    SELECT
+        Id_Estudio,
+        Nombre_Estudio,
+        CASE 
+            WHEN Autorizacion = 1 THEN 'Autorizado' 
+            ELSE 'No Autorizado' 
+        END AS Autorizacion
+    FROM clinica.Tipo_Estudio
+    WHERE Id_Estudio NOT IN (SELECT Id_Estudio FROM clinica.Estudio)
+    AND Nombre_Estudio IS NOT NULL
+
 END
 GO
 
--- Test
 
 

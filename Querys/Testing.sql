@@ -4,9 +4,6 @@
 EXEC Clinica.Insertar_Paciente 'Juan', 'Perez', 'Gomez', '1990-01-01', 'DNI', '12345678', 'M', 'Masculino', 'Argentino', 'foto.jpg', 'nacho@nacho', '123456789', '123456789', '123456789', '2021-06-01', 'nacho'
 
 
---Insertar Usuario
-SELECT * FROM
-clinica.Paciente; --Se inserto un paciente Juan Perez
 
 EXEC Clinica.Insertar_Usuario 1, '1234';
 
@@ -15,18 +12,44 @@ EXEC Clinica.Insertar_Usuario 1, '1234';
 EXEC Clinica.Insertar_Estudio 1, '2021-06-01', 'Estudio1', 1, 'doc.pdf', 'img.jpg';
 
 --Insertar Cobertura:
-EXEC Clinica.Insertar_Cobertura 1, 'img.jpg', '123456', '2021-06-01', 1;
+EXEC Clinica.Insertar_Cobertura 'img.jpg', '123456', '2021-06-01';
+
+--Insertar Prestador:
+
+EXEC Clinica.Insertar_Prestador 'OSDE','Osde 660';
+
+--Insertar Direccion:
+
+EXEC Clinica.Insertar_Domicilio 'Rivadavia','12500',NULL,null,'1684','Argentina','Buenos Aires','Haedo',;
+
+--Insertar Reserva Turno Medico:
+EXEC Reserva_Turno_Medico '2021-06-01','10:00';
+
+--Insertar Estado Turno:
+
+EXEC Clinica.Insertar_Estado_Turno 'Atendido';
+EXEC Clinica.Insertar_Estado_Turno 'Ausente';
+EXEC Clinica.Insertar_Estado_Turno 'Cancelado';
+
+--Insertar Tipo Turno:
+
+EXEC Clinica.Insertar_Tipo_Turno 'Presencial';
+EXEC Clinica.Insertar_Tipo_Turno 'Virtual';
+
+--Insertar_Dias_Por_Sede:
+
+EXEC Clinica.Insertar_Dias_Por_Sede 'Lunes','10:00';
 
 --Insertar Medico:
-EXEC Clinica.Insertar_Medico 'Juan', 'Perez', 'Gomez', '1990-01-01', 'DNI', '12345678', 'M', 'Masculino', 'Argentino', 'foto.jpg', 'nacho@nacho', '123456789', '123456789', '123456789', '2021-06-01', 'nacho', 1, 1;
+
+EXEC Clinica.Insertar_Medico 'Ignacio','Calvo','112233'
+
 
 --Insertar Especialidad:
 EXEC Clinica.Insertar_Especialidad 'Otorrinolaringologia';
 
 --Insertar Sede:
-EXEC Clinica.Insertar_Sede_De_Atencion 'Sede1', 'Direccion1', '123456789', '123456789', '123456789', '2021-06-01', 'nacho', 1;
-
-
+EXEC Clinica.Insertar_Sede_De_Atencion 'Haedo','Rivadavia 12500'
 
 
 -------------------------ELIMINAR:-----------------------------

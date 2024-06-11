@@ -67,7 +67,7 @@ BEGIN
         Imagen_Credencial VARCHAR(100),
         Nro_Socio VARCHAR(50) NOT NULL,
         Fecha_Registro DATETIME NOT NULL,
-        Id_Prestador INT NOT NULL,
+        Id_Prestador INT,
         FOREIGN KEY (Id_Prestador) REFERENCES clinica.Prestador(Id_Prestador)
     );
 END
@@ -182,7 +182,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Estad
 BEGIN
     CREATE TABLE clinica.Estado_Turno
     (
-        Id_Estado INT PRIMARY KEY,
+        Id_Estado INT IDENTITY(1,1)PRIMARY KEY,
         Nombre_Estado VARCHAR(50) NOT NULL
     );
 END
@@ -192,23 +192,23 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Tipo_
 BEGIN
     CREATE TABLE clinica.Tipo_Turno
     (
-        Id_Tipo_Turno INT PRIMARY KEY,
+        Id_Tipo_Turno INT IDENTITY(1,1) PRIMARY KEY,
         Nombre_Tipo_Turno VARCHAR(50) NOT NULL
     );
 END
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Reserva_Turno_Medico' AND TABLE_SCHEMA = 'clinica')
 BEGIN
-    CREATE TABLE clinica.Reserva_Turno_Medico
+    CREATE TABLE clinica.Reserva_Turno_Medicos
     (
-        Id_Turno INT IDENTIFY (1,1) PRIMARY KEY,
+        Id_Turno INT IDENTITY (1,1) PRIMARY KEY,
         Fecha DATE NOT NULL,
         Hora TIME NOT NULL,
-        Id_Medico INT NOT NULL,
-        Id_Especialidad INT NOT NULL,
-        Id_Direccion_Atencion INT NOT NULL,
-        Id_Estado_Turno INT NOT NULL,
-        Id_Tipo_Turno INT NOT NULL,
+        Id_Medico INT,
+        Id_Especialidad INT,
+        Id_Direccion_Atencion INT,
+        Id_Estado_Turno INT,
+        Id_Tipo_Turno INT,
         Id_Historia_Clinica INT,
         FOREIGN KEY (Id_Medico) REFERENCES clinica.Medico(Id_Medico),
         FOREIGN KEY (Id_Especialidad) REFERENCES clinica.Especialidad(Id_Especialidad),
@@ -223,10 +223,10 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Dias_
 BEGIN
     CREATE TABLE clinica.Dias_Por_Sede
     (
-        Id_Sede INT PRIMARY KEY,
-        Id_Medico INT NOT NULL,
+        Id_Sede INT IDENTITY(1,1)PRIMARY KEY,
+        Id_Medico INT,
         Dia VARCHAR(20) NOT NULL,
-        Hora_Inicio TIME NOT NULL
+        Hora_Inicio TIME 
         FOREIGN KEY (Id_Medico) REFERENCES clinica.Medico(Id_Medico),
         FOREIGN KEY (Id_Sede) REFERENCES clinica.Sede_De_Atencion(Id_Sede)
     );

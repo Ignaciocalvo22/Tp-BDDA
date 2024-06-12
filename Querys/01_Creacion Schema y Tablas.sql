@@ -14,10 +14,11 @@
 
 
 -- Se crea la base de datos:
-IF NOT EXISTS(SELECT name FROM master.dbo.sysdatabases WHERE name = 'Com2900G03') 
-BEGIN 
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'Com2900G03')
+BEGIN
     CREATE DATABASE Com2900G03 COLLATE Modern_Spanish_CI_AS;
 END
+GO
 
 USE Com2900G03
 GO
@@ -45,9 +46,9 @@ BEGIN
         Codigo_Postal VARCHAR(50),
         Pais VARCHAR(50) NOT NULL,
         Provincia VARCHAR(50) NOT NULL,
-        Localidad VARCHAR(50) NOT NULL,
+        Localidad VARCHAR(50) NOT NULL
     );
-END
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Prestador' AND TABLE_SCHEMA = 'clinica')
 BEGIN
@@ -55,9 +56,9 @@ BEGIN
     (
         Id_Prestador INT IDENTITY(1,1) PRIMARY KEY,
         Nombre_Prestador VARCHAR(50) NOT NULL,
-        Plan_Prestador VARCHAR(50) NOT NULL,
+        Plan_Prestador VARCHAR(50) NOT NULL
     );
-END
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Cobertura' AND TABLE_SCHEMA = 'clinica')
 BEGIN
@@ -70,7 +71,7 @@ BEGIN
         Id_Prestador INT,
         FOREIGN KEY (Id_Prestador) REFERENCES clinica.Prestador(Id_Prestador)
     );
-END
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Paciente' AND TABLE_SCHEMA = 'clinica')
 BEGIN
@@ -99,6 +100,7 @@ BEGIN
         FOREIGN KEY (Id_Domicilio) REFERENCES clinica.Domicilio(Id_Domicilio),
         FOREIGN KEY (Id_Cobertura) REFERENCES clinica.Cobertura(Id_Cobertura)
     );
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Usuario' AND TABLE_SCHEMA = 'clinica')
 BEGIN
@@ -110,8 +112,7 @@ BEGIN
         Id_Historia_Clinica INT,
         FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
     );
-END
-
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Estudio' AND TABLE_SCHEMA = 'clinica')
 BEGIN
@@ -123,37 +124,19 @@ BEGIN
         Autorizado INT NOT NULL,
         Documento_Resultado VARCHAR(100) NOT NULL,
         Imagen_Resultado VARCHAR(100),
-        Id_Historia_Clinica VARCHAR(30),
+        Id_Historia_Clinica INT,
         FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
     );
-END
-
-
-
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Domicilio' AND TABLE_SCHEMA = 'clinica')
-BEGIN
-    CREATE TABLE clinica.Domicilio
-    (
-        Id_Domicilio INT IDENTITY(1,1) PRIMARY KEY,
-        Calle VARCHAR(50) NOT NULL,
-        Numero VARCHAR(50) NOT NULL,
-        Piso VARCHAR(50),
-        Departamento VARCHAR(50),
-        Codigo_Postal VARCHAR(50) NOT NULL,
-        Pais VARCHAR(50) NOT NULL,
-        Provincia VARCHAR(50) NOT NULL,
-        Localidad VARCHAR(50) NOT NULL,
-    );
-END
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Especialidad' AND TABLE_SCHEMA = 'clinica')
 BEGIN
     CREATE TABLE clinica.Especialidad
     (
-        Id_Especialidad INT IDENTITY(1,1)PRIMARY KEY,
+        Id_Especialidad INT IDENTITY(1,1) PRIMARY KEY,
         Nombre_Especialidad VARCHAR(50) NOT NULL
     );
-END
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Medico' AND TABLE_SCHEMA = 'clinica')
 BEGIN
@@ -162,11 +145,11 @@ BEGIN
         Id_Medico INT IDENTITY(1,1) PRIMARY KEY,
         Nombre VARCHAR(50) NOT NULL,
         Apellido VARCHAR(50) NOT NULL,
-        Nro_Matricula INTEGER NOT NULL,
+        Nro_Matricula INT NOT NULL,
         Id_Especialidad INT,
         FOREIGN KEY (Id_Especialidad) REFERENCES clinica.Especialidad(Id_Especialidad)
     );
-END
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Sede_De_Atencion' AND TABLE_SCHEMA = 'clinica')
 BEGIN
@@ -176,17 +159,16 @@ BEGIN
         Nombre_Sede VARCHAR(50) NOT NULL,
         Direccion VARCHAR(50) NOT NULL
     );
-END
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Estado_Turno' AND TABLE_SCHEMA = 'clinica')
 BEGIN
     CREATE TABLE clinica.Estado_Turno
     (
-        Id_Estado INT IDENTITY(1,1)PRIMARY KEY,
+        Id_Estado INT IDENTITY(1,1) PRIMARY KEY,
         Nombre_Estado VARCHAR(50) NOT NULL
     );
-END
-
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Tipo_Turno' AND TABLE_SCHEMA = 'clinica')
 BEGIN
@@ -195,13 +177,13 @@ BEGIN
         Id_Tipo_Turno INT IDENTITY(1,1) PRIMARY KEY,
         Nombre_Tipo_Turno VARCHAR(50) NOT NULL
     );
-END
+END;
 
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Reserva_Turno_Medico' AND TABLE_SCHEMA = 'clinica')
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Reserva_Turno_Medicos' AND TABLE_SCHEMA = 'clinica')
 BEGIN
     CREATE TABLE clinica.Reserva_Turno_Medicos
     (
-        Id_Turno INT IDENTITY (1,1) PRIMARY KEY,
+        Id_Turno INT IDENTITY(1,1) PRIMARY KEY,
         Fecha DATE NOT NULL,
         Hora TIME NOT NULL,
         Id_Medico INT,
@@ -217,20 +199,20 @@ BEGIN
         FOREIGN KEY (Id_Tipo_Turno) REFERENCES clinica.Tipo_Turno(Id_Tipo_Turno),
         FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
     );
-END
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Dias_Por_Sede' AND TABLE_SCHEMA = 'clinica')
 BEGIN
     CREATE TABLE clinica.Dias_Por_Sede
     (
-        Id_Sede INT IDENTITY(1,1)PRIMARY KEY,
+        Id_Sede INT,
         Id_Medico INT,
         Dia VARCHAR(20) NOT NULL,
-        Hora_Inicio TIME 
+        Hora_Inicio TIME,
         FOREIGN KEY (Id_Medico) REFERENCES clinica.Medico(Id_Medico),
         FOREIGN KEY (Id_Sede) REFERENCES clinica.Sede_De_Atencion(Id_Sede)
     );
-END
+END;
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Tipo_Estudio' AND TABLE_SCHEMA = 'clinica')
 BEGIN
@@ -244,5 +226,5 @@ BEGIN
         Cobertura INT,
         Costo INT,
         Autorizacion BIT
-    )
-END
+    );
+END;

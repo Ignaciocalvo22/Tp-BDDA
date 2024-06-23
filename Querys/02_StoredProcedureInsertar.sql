@@ -1,5 +1,4 @@
 
-
 CREATE OR ALTER PROCEDURE clinica.Insertar_Paciente
 (
     @Nombre VARCHAR(50),
